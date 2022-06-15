@@ -38,7 +38,7 @@ public class RabbitMqReceiver {
 		 
 		 try {
 			 
-			 Optional<ProfileEntity> profileOpt = profileRepository.findByUserId(profile.getUserId());
+			 Optional<ProfileEntity> profileOpt = profileRepository.findByAssociateId(profile.getAssociateId());
 			 ProfileEntity entity = new ProfileEntity();
 			 if(profileOpt.isPresent()) {
 				 //Update profile

@@ -21,6 +21,7 @@ import com.cts.skilltracker.exceptions.ResourceNotFoundException;
 import com.cts.skilltracker.services.iface.IProfileSearchService;
 import com.cts.skilltracker.utils.QuerySideConstants;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -44,9 +45,10 @@ public class QuerySideController {
 			@ApiResponse(responseCode = "404", description = "Resource not found", content = @Content(mediaType = "application/json")),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json")) })
 	@GetMapping(value = QuerySideConstants.SEARCH_PROFILE_ROUTE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@CircuitBreaker(name = "searchProfileCB", fallbackMethod = "searchProfileFallback")
 	public ResponseEntity<ProfileSearchRsp> searchProfile(
 			@Parameter(description = QuerySideConstants.CRITERIA_DESC, required = true) @PathVariable(value = "criteria") String criteria, 
-			@Parameter(description = QuerySideConstants.CRITERIA_VALUE_DESC, required = true) @PathVariable(value = "criteriaValue") String criteriaValue) {
+			@Parameter(description = QuerySideConstants.CRITERIA_VALUE_DESC, required = true) @PathVariable(value = "criteriaValue") String criteriaValue) throws Exception {
 
 		String METHOD = "searchProfile() - ";
 		logger.info(METHOD + "Entry -> criteria:: " + criteria + ", criteriaValue:: " + criteriaValue);
@@ -70,5 +72,11 @@ public class QuerySideController {
 		return new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
 	}
+	
+	public ResponseEntity<String> searchProfileFallback(String criteria,String criteriaValue, Exception e) {
+        logger.info("---RESPONSE FROM FALLBACK METHOD---");
+        String response = "SERVICE IS DOWN, PLEASE TRY AGAIN AFTER SOMETIME";
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+     }
 
 }

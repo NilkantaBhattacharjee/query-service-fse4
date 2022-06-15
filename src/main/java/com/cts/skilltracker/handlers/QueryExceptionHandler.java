@@ -194,7 +194,7 @@ public class QueryExceptionHandler extends ResponseEntityExceptionHandler {
 
 	/**
 	 * Defining a global exception hander allows us to deal with all those
-	 * exceptions that don’t have specific handlers.
+	 * exceptions that does not have specific handlers.
 	 * 
 	 * @param ex
 	 * @param request
