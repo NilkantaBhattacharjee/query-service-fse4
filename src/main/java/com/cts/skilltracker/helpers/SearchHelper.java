@@ -56,7 +56,7 @@ public class SearchHelper {
 		String METHOD = "searchByName() - ";
 		logger.info(METHOD + "Entry -> value:: " + value);
 		List<Profile> profiles = new ArrayList<>();
-		List<ProfileEntity> rows = profileRepository.findByNameLike(value);
+		List<ProfileEntity> rows = profileRepository.searchByName(value);
 
 		if (rows != null && rows.size() > 0) {
 			for (ProfileEntity row : rows) {

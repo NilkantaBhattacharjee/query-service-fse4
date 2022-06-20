@@ -31,6 +31,7 @@ public class ProfileSearchServiceImpl implements IProfileSearchService{
 			profiles = helper.searchByCriteria(criteria, value);
 		} catch (Exception ex) {
 			logger.error(METHOD + "Exception occurred:: " + ex.getMessage());
+			ex.printStackTrace();
 		}
 		
 		logger.info(METHOD + "Exit");

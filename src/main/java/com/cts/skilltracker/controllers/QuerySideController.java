@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping(value = QuerySideConstants.ADMIN_ROUTE)
 public class QuerySideController {
 	
@@ -45,7 +47,7 @@ public class QuerySideController {
 			@ApiResponse(responseCode = "404", description = "Resource not found", content = @Content(mediaType = "application/json")),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json")) })
 	@GetMapping(value = QuerySideConstants.SEARCH_PROFILE_ROUTE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@CircuitBreaker(name = "searchProfileCB", fallbackMethod = "searchProfileFallback")
+	//@CircuitBreaker(name = "searchProfileCB", fallbackMethod = "searchProfileFallback")
 	public ResponseEntity<ProfileSearchRsp> searchProfile(
 			@Parameter(description = QuerySideConstants.CRITERIA_DESC, required = true) @PathVariable(value = "criteria") String criteria, 
 			@Parameter(description = QuerySideConstants.CRITERIA_VALUE_DESC, required = true) @PathVariable(value = "criteriaValue") String criteriaValue) throws Exception {
